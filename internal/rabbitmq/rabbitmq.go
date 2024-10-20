@@ -1,21 +1,21 @@
 package rabbitmq
 
 import (
-	"log"
-
 	"github.com/JerryLegend254/order-processing-system/internal/config"
+	"github.com/JerryLegend254/order-processing-system/internal/logger"
 	amq "github.com/rabbitmq/amqp091-go"
 )
 
 func Connect() (*amq.Connection, error) {
+	logger := logger.New()
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.Panicf("Failed to load config: %v", err)
+		logger.LogPanic(err, "Failed to load config")
 		return nil, err
 	}
 	conn, err := amq.Dial(cfg.RabbitMQURL)
 	if err != nil {
-		log.Panicf("Failed to connect to RabbitMQ: %v", err)
+		logger.LogPanic(err, "Failed to connect to RabbitMQ")
 		return nil, err
 	}
 	return conn, nil
